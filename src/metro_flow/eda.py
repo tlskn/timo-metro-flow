@@ -20,6 +20,7 @@ FIG.mkdir(parents=True, exist_ok=True)
 QUARTER = {"I квартал": 1, "II квартал": 2, "III квартал": 3, "IV квартал": 4}
 plt.rcParams["font.family"] = "Times New Roman"
 plt.rcParams["font.size"] = 12
+BLUE, ORANGE, RED, LIGHT = "#2E6DB4", "#F28E2B", "#D62728", "#A9C8EA"
 R = {}
 
 
@@ -186,9 +187,9 @@ raw = pd.read_csv(ROOT / "data" / "raw" / "data-62743-08-09-2026.csv", sep=";", 
 raw["t"] = raw["Year"] * 10 + raw["Quarter"].map(QUARTER)
 tot = raw.groupby("t")["Incoming passengers"].sum() / 1e6
 labels = [f"{str(t)[2:4]}-{t % 10}" for t in tot.index]
-colors = ["#7f7f7f" if t <= 20242 else "#d9d9d9" for t in tot.index]
+colors = [BLUE if t <= 20242 else ORANGE for t in tot.index]
 fig, ax = plt.subplots(figsize=(10, 4.2))
-bars = ax.bar(range(len(tot)), tot.values, color=colors, edgecolor="black", lw=0.6)
+bars = ax.bar(range(len(tot)), tot.values, color=colors, edgecolor="white", lw=0.6)
 for i, (s, e) in enumerate([(20243, 20244), (20251, 20252), (20253, 20254), (20261, 20262)], 1):
     xs = [j for j, t in enumerate(tot.index) if s <= t <= e]
     ax.text(np.mean(xs), tot.max() * 1.03, f"batch_{i:02d}", ha="center", fontsize=10)
@@ -199,48 +200,51 @@ ax.set_ylim(0, tot.max() * 1.12)
 fig.savefig(FIG / "fig2_1_split.png", dpi=200, bbox_inches="tight"); plt.close(fig)
 
 fig, axs = plt.subplots(1, 2, figsize=(10, 3.8))
-axs[0].hist(d["inc"] / 1e6, bins=40, color="#9e9e9e", edgecolor="black", lw=0.5)
+axs[0].hist(d["inc"] / 1e6, bins=40, color=BLUE, edgecolor="white", lw=0.5)
 axs[0].set_xlabel("Входы за квартал, млн"); axs[0].set_ylabel("Число записей")
 axs[0].set_title("а) исходная шкала", fontsize=12)
-axs[1].hist(np.log10(nz["inc"]), bins=40, color="#9e9e9e", edgecolor="black", lw=0.5)
+axs[1].hist(np.log10(nz["inc"]), bins=40, color=ORANGE, edgecolor="white", lw=0.5)
 axs[1].set_xlabel("lg(входы за квартал)"); axs[1].set_title("б) логарифмическая шкала", fontsize=12)
 fig.tight_layout(); fig.savefig(FIG / "fig2_2_target.png", dpi=200, bbox_inches="tight"); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(6.4, 5.2))
-ax.scatter(nz["out"] / 1e6, nz["inc"] / 1e6, s=6, c="#555555", alpha=0.5)
+ax.scatter(nz["out"] / 1e6, nz["inc"] / 1e6, s=6, c=BLUE, alpha=0.5)
 bad = nz[(nz.ratio < 0.5) | (nz.ratio > 2)]
-ax.scatter(bad["out"] / 1e6, bad["inc"] / 1e6, s=60, facecolors="none", edgecolors="black", lw=1.5)
+ax.scatter(bad["out"] / 1e6, bad["inc"] / 1e6, s=80, facecolors="none", edgecolors=RED, lw=2)
 for _, r in bad.iterrows():
     ax.annotate(f"{r.station}, {str(r.t)[:4]}-{r.t % 10}", (r.out / 1e6, r.inc / 1e6),
-                xytext=(8, -4), textcoords="offset points", fontsize=10)
+                xytext=(8, -4), textcoords="offset points", fontsize=10, color=RED)
 m = max(nz["inc"].max(), nz["out"].max()) / 1e6
 ax.plot([0, m], [0, m], "k--", lw=0.8)
 ax.set_xlabel("Выходы, млн"); ax.set_ylabel("Входы, млн")
 fig.savefig(FIG / "fig2_3_in_out.png", dpi=200, bbox_inches="tight"); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(7, 4))
-ax.boxplot([wide[c] * 100 for c in (1, 2, 3, 4)], showfliers=False)
+bp = ax.boxplot([wide[c] * 100 for c in (1, 2, 3, 4)], showfliers=False, patch_artist=True,
+                medianprops=dict(color="black"))
+for patch_, col in zip(bp["boxes"], ["#A9C8EA", "#8BC34A", "#F6C85F", "#F28E2B"]):
+    patch_.set_facecolor(col)
 ax.set_xticks([1, 2, 3, 4], ["I", "II", "III", "IV"])
 ax.axhline(25, color="black", ls=":", lw=0.8)
 ax.set_xlabel("Квартал"); ax.set_ylabel("Доля квартала в годовом потоке, %")
 fig.savefig(FIG / "fig2_4_season.png", dpi=200, bbox_inches="tight"); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(7.4, 6))
-im = ax.imshow(cm.values, cmap="Greys", vmin=-1, vmax=1)
+im = ax.imshow(cm.values, cmap="RdBu_r", vmin=-1, vmax=1)
 ax.set_xticks(range(len(cm)), [cm_cols[c] for c in cm.columns], fontsize=10, rotation=45, ha="right")
 ax.set_yticks(range(len(cm)), [cm_cols[c] for c in cm.columns], fontsize=10)
 for i in range(len(cm)):
     for j in range(len(cm)):
         v = cm.values[i, j]
         ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=10,
-                color="white" if abs(v) > 0.6 else "black")
+                color="white" if abs(v) > 0.7 else "black")
 fig.colorbar(im, ax=ax, fraction=0.046)
 fig.savefig(FIG / "fig2_5_corr.png", dpi=200, bbox_inches="tight"); plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(7, 3.8))
 for row in ramp:
-    ax.plot(range(1, 7), row, color="#bbbbbb", lw=0.8)
-ax.plot(range(1, 7), ramp.mean(axis=0), color="black", lw=2.2, marker="o", label="среднее")
+    ax.plot(range(1, 7), row, color=LIGHT, lw=0.8)
+ax.plot(range(1, 7), ramp.mean(axis=0), color=RED, lw=2.4, marker="o", label="среднее")
 ax.axhline(1, color="black", ls=":", lw=0.8)
 ax.set_xlabel("Номер квартала с момента открытия")
 ax.set_ylabel("Поток / средний поток\nкварталов 3–6")
