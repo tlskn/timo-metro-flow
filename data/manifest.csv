@@ -1,0 +1,9 @@
+file;rows;sha256;source
+data/raw/data-1488-08-09-2026.csv;314;80af65190e0be2d07efb0bc2527172b7d9e0e544f78358301ea3131bcb198f13;https://data.mos.ru/opendata/1488
+data/raw/data-624-11-09-2026.csv;1177;c60d011ed88ca4961f57e2122c2ada16d6b21a01c2e5c30785df8f5d116c44a6;https://data.mos.ru/opendata/624
+data/raw/data-62743-08-09-2026.csv;6448;3446e5480a6a0f3953ad5960b1cc68be072d8480547dd9c2d8654c72f682bce3;https://data.mos.ru/opendata/62743
+data/initial/passenger_flow_initial.csv;4009;d3f2a0500957a8bc8a191382e9a9588c167036d89297460ee6968eb561215287;split_batches.py из data-62743-08-09-2026.csv
+data/incoming/batch_01.csv;611;ab56e3f31877b7f49cfa1294c72fb8cc00a6e07be482a4580533d791391ac1a2;split_batches.py из data-62743-08-09-2026.csv
+data/incoming/batch_02.csv;608;6187b5b6ed47a0bfcdfa3bafd107e5e889e1c52c5d554acf124e273325f56ba0;split_batches.py из data-62743-08-09-2026.csv
+data/incoming/batch_03.csv;610;d3f20a17975756aa896c93775cb14eede6dd8090bd063b821d7240a78a379b1a;split_batches.py из data-62743-08-09-2026.csv
+data/incoming/batch_04.csv;610;c314e2c8eb40fe6cf9358cd8b685f571d2d0ce5606239896623efd3345a17f09;split_batches.py из data-62743-08-09-2026.csv
