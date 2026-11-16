@@ -1,0 +1,25 @@
+{
+  "split_hashes_identical": true,
+  "eda_identical": true,
+  "pr3_winner_metrics_identical": true,
+  "winner": "Ridge short 10",
+  "repeat": true,
+  "reload_identical": true,
+  "prepare_initial_rows": 3928,
+  "prepare_batch_rows": 597,
+  "nonwinner_run_differences": {
+    "WAPE": {
+      "KNN 15": 0.0019075752801516188
+    },
+    "MAE": {
+      "KNN 15": 36.63333333330229
+    },
+    "RMSE": {
+      "KNN 15": 42.91015339491423
+    },
+    "std_WAPE": {
+      "KNN 15": 0.002081975996554908
+    }
+  },
+  "note": "При повторном запуске KNN 15 показал небольшое отличие; остальные 26 конфигураций и выбранная модель совпали. Причина различия отдельно не установлена. Исходные результаты в pr3/reports сохранены без подмены."
+}

@@ -1,0 +1,41 @@
+{
+  "winner": "Ridge short 10",
+  "seed": 42,
+  "source_sha256": "d3f2a0500957a8bc8a191382e9a9588c167036d89297460ee6968eb561215287",
+  "versions": {
+    "python": "3.14.8",
+    "sklearn": "1.9.1",
+    "pandas": "3.0.6",
+    "numpy": "2.5.3"
+  },
+  "train_rows": 1699,
+  "test_rows": 584,
+  "raw_rows": 4009,
+  "clean_rows": 3928,
+  "usable_rows": 2574,
+  "repeat": true,
+  "reload_identical": true,
+  "features": [
+    "lag2",
+    "lag4",
+    "station",
+    "line"
+  ],
+  "test_periods": [
+    12,
+    13
+  ],
+  "parameters": {
+    "alpha": 10,
+    "copy_X": true,
+    "fit_intercept": true,
+    "max_iter": null,
+    "positive": false,
+    "random_state": null,
+    "solver": "auto",
+    "tol": 0.0001
+  },
+  "created": "2026-11-14T16:44:49.104440",
+  "embargo_rows": 291,
+  "embargo_period": "IV квартал 2023"
+}
